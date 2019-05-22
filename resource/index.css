@@ -1,0 +1,86 @@
+body > div {
+    overflow: auto;
+}
+
+.function-bar {
+    display: flex;
+    padding: 0 1em;
+    margin: 0.5em 0;
+}
+
+.function-bar > .left {
+    flex: 1;
+    display: flex;
+}
+
+.function-bar > .right {
+    display: flex;
+    align-items: center;
+}
+
+.function-bar > .right > div {
+}
+
+#server-state-dot {
+    width: 0.5em;
+    height: 0.5em;
+    border-radius: 50%;
+}
+
+#server-info {
+    margin-left: 0.5em;
+}
+
+#server-pid, #server-ip {
+    font-size: 0.8em;
+}
+
+.dot-running {
+    background: green;
+    animation: disappear 2s ease-in-out infinite;
+    animation-direction: alternate;
+}
+
+.dot-stopped {
+    background: red;
+}
+
+.log-area {
+    flex: 1;
+    border: 2px green dashed;
+    border-bottom: none;
+    margin: 0 0.5em;
+}
+
+.loading-bar {
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.log-info {
+    color: green;
+}
+
+.log-warning {
+    color: sandybrown;
+}
+
+.float-right {
+    position: absolute;
+    bottom: 0.2em;
+    right: 1.5em;
+    font-size: 0.6em;
+    color: #999999;
+    animation: disappear 2s ease-in-out infinite;
+    animation-direction: alternate;
+}
+
+@keyframes disappear {
+    from {
+        opacity: 0.5;
+    }
+    to {
+        opacity: 0;
+    }
+}

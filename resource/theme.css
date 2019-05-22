@@ -1,0 +1,110 @@
+::-webkit-scrollbar {
+    width: 0.3em;
+    height: 0.3em;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #555555;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    height: 100%;
+}
+
+body {
+    color: #555555;
+    height: 100%;
+    background: #090821;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/************************************************** loading **************************************************/
+.loading {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: space-between;
+    width: 2em;
+}
+
+.loading > span {
+    width: 0.3em;
+    height: 1em;
+    background-color: #3cefff;
+}
+
+.loading > span:nth-of-type(1) {
+    animation: grow 1s -0.45s ease-in-out infinite;
+}
+
+.loading > span:nth-of-type(2) {
+    animation: grow 1s -0.3s ease-in-out infinite;
+}
+
+.loading > span:nth-of-type(3) {
+    animation: grow 1s -0.15s ease-in-out infinite;
+}
+
+.loading > span:nth-of-type(4) {
+    animation: grow 1s ease-in-out infinite;
+}
+
+@keyframes grow {
+    0%,
+    100% {
+        transform: scaleY(1);
+    }
+
+    50% {
+        transform: scaleY(2);
+    }
+}
+
+/************************************************** button **************************************************/
+.button-main {
+    color: #EFEFEF;
+    cursor: pointer;
+    font-size: 1.2em;
+    margin-right: 1em;
+    user-select: none;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+}
+
+.button-main:active {
+    font-weight: bold;
+}
+
+.button-high-light {
+    position: relative;
+    z-index: 1;
+}
+
+.button-high-light::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    bottom: 0;
+    left: -0.25em;
+    right: -0.25em;
+    background-color: green;
+    transform-origin: bottom center;
+    transform: scaleY(0.1);
+    transition: all 0.1s ease-in-out;
+}
+
+.button-high-light:hover::before {
+    transform: scaleY(1);
+    background-color: green;
+}

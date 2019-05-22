@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>The Filer GUI</title>
+    <link type="text/css" rel="stylesheet" href="theme.css"/>
+    <link type="text/css" rel="stylesheet" href="index.css"/>
+</head>
+<body>
+<div class="function-bar">
+    <div class="left">
+        <div id="function-run" class="button-main button-high-light" onclick="renderEvent.run()">RUN</div>
+        <div id="function-stop" class="button-main button-high-light" onclick="renderEvent.stop()">STOP</div>
+        <div id="function-open-folder" class="button-main button-high-light" onclick="renderEvent.openFolder()">OPEN
+            FOLDER
+        </div>
+    </div>
+    <div class="right">
+        <div id="server-state-dot" class="dot-stopped"></div>
+        <div id="server-info">
+            <div id="server-ip"></div>
+            <div id="server-pid"></div>
+        </div>
+    </div>
+</div>
+<div class="log-area">
+    <div class="loading-bar">
+        <div class="loading">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+    <div id="log-stage"></div>
+</div>
+<div class="float-right">©LeenSamZiv</div>
+<script>
+    const ipcRenderer = require('electron').ipcRenderer;
+    const logStage = document.getElementById('log-stage');
+    const serverStateDot = document.getElementById('server-state-dot');
+
+    /**
+     * 渲染器
+     * @type {{barLoading: (function(*): string), buttonRun: (function(*): string)}}
+     */
+    let render = {
+        barLoading: loading => document.getElementsByClassName('loading-bar')[0].style.display = (loading ? 'flex' : 'none'),
+        serverPID: pidNumber => document.getElementById('server-pid').innerHTML = (pidNumber ? ('PID : ' + pidNumber) : ''),
+        logStage: (msg, type) => {
+            logStage.innerHTML = logStage.innerHTML + '<div class="log-' + (type ? type : 'info') + '">' + msg + '</div>';
+            logStage.children[logStage.childElementCount - 1].scrollIntoView({behavior: 'smooth', block: 'start'})
+        },
+        serverStateDot: running => {
+            serverStateDot.classList.remove(running ? 'dot-stopped' : 'dot-running');
+            serverStateDot.classList.add(running ? 'dot-running' : 'dot-stopped');
+        },
+        serverIP: ip => document.getElementById('server-ip').innerHTML = (ip ? ('IP : ' + ip) : '')
+    };
+
+    let renderEvent = {
+        run: () => {
+            render.barLoading(true);
+            logStage.innerHTML = '';
+            ipcRenderer.send('run');
+        },
+        stop: () => {
+            render.barLoading(true);
+            ipcRenderer.send('stop');
+        },
+        openFolder: () => {
+            ipcRenderer.send('openFolder');
+        },
+        runDone: () => {
+            render.barLoading(false);
+            render.serverStateDot(true);
+        },
+        stopDone: message => {
+            render.barLoading(false);
+            render.logStage(message, 'warning');
+            render.serverStateDot(false);
+            render.serverPID();
+        }
+    };
+
+    ipcRenderer.on('runLog', (event, message) => render.logStage(message));
+    ipcRenderer.on('runDone', (event, message) => renderEvent.runDone());
+    ipcRenderer.on('stopDone', (event, message) => renderEvent.stopDone(message));
+    ipcRenderer.on('serverPID', (event, message) => render.serverPID(message));
+    ipcRenderer.on('serverIP', (event, message) => render.serverIP(message));
+
+    render.logStage(new Date().toLocaleString() + ' Welcome To The Filer GUI', 'warning');
+</script>
+</body>
+</html>
