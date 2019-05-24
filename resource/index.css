@@ -31,8 +31,12 @@ body > div {
     margin-left: 0.5em;
 }
 
-#server-pid, #server-ip {
+#server-pid, #server-address {
     font-size: 0.8em;
+}
+
+#server-address{
+    display: flex;
 }
 
 .dot-running {
@@ -78,7 +82,7 @@ body > div {
 
 @keyframes disappear {
     from {
-        opacity: 0.5;
+        opacity: 0.8;
     }
     to {
         opacity: 0;

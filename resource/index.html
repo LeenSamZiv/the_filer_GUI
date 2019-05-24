@@ -18,7 +18,10 @@
     <div class="right">
         <div id="server-state-dot" class="dot-stopped"></div>
         <div id="server-info">
-            <div id="server-ip"></div>
+            <div id="server-address">
+                <div id="server-ip"></div>
+                <div id="server-port"></div>
+            </div>
             <div id="server-pid"></div>
         </div>
     </div>
@@ -55,7 +58,8 @@
             serverStateDot.classList.remove(running ? 'dot-stopped' : 'dot-running');
             serverStateDot.classList.add(running ? 'dot-running' : 'dot-stopped');
         },
-        serverIP: ip => document.getElementById('server-ip').innerHTML = (ip ? ('IP : ' + ip) : '')
+        serverIP: ip => document.getElementById('server-ip').innerHTML = (ip ? ('URL : ' + ip) : ''),
+        serverPort: port => document.getElementById('server-port').innerHTML = (port ? (':' + port) : '')
     };
 
     let renderEvent = {
@@ -88,6 +92,7 @@
     ipcRenderer.on('stopDone', (event, message) => renderEvent.stopDone(message));
     ipcRenderer.on('serverPID', (event, message) => render.serverPID(message));
     ipcRenderer.on('serverIP', (event, message) => render.serverIP(message));
+    ipcRenderer.on('serverPort', (event, message) => render.serverPort(message));
 
     render.logStage(new Date().toLocaleString() + ' Welcome To The Filer GUI', 'warning');
 </script>

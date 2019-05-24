@@ -4,10 +4,11 @@ const ipcMain = require('electron').ipcMain;
 const exec = require('child_process').exec;
 
 let {win, cmd, ipCmd, serverPID} = {};
+let iconv = require('iconv-lite');
 
 let createWindow = () => {
     win = new BrowserWindow({
-        width: 600,
+        width: 800,
         height: 600,
         center: true,
         webPreferences: {
@@ -28,14 +29,16 @@ let handleEvent = () => {
 
 let handleServer = (run) => {
     if (run) {
-        cmd = exec('java -jar resource/server/the_filer-1.2.jar');
+        cmd = exec('java -jar resource/server/the_filer-1.2.jar', {encoding: 'GBK'});
         cmd.stdout.on('data', log => {
             if (log.indexOf('Starting TheFilerApplication v1.2 on') > 0) {
-                let array = log.split(' ');
-                serverPID = log.match(/with PID (\d+)/)[1];
+                serverPID = log.toString().match(/with PID (\d+)/)[1];
                 win.webContents.send('serverPID', serverPID);
             }
-            win.webContents.send('runLog', log);
+            if (log.indexOf('Tomcat started on port(s): ') > 0) {
+                win.webContents.send('serverPort', log.toString().match(/port\(s\): (\d+)/)[1]);
+            }
+            win.webContents.send('runLog', iconv.decode(log, 'GBK'));
         });
         win.webContents.send('runDone');
 
