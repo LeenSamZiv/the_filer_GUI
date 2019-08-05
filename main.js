@@ -29,9 +29,9 @@ let handleEvent = () => {
 
 let handleServer = (run) => {
     if (run) {
-        cmd = exec('java -jar resource/server/the_filer-1.2.jar', {encoding: 'GBK'});
+        cmd = exec('java -jar resource/server/the_filer-1.3.jar', {encoding: 'GBK'});
         cmd.stdout.on('data', log => {
-            if (log.indexOf('Starting TheFilerApplication v1.2 on') > 0) {
+            if (log.indexOf('Starting TheFilerApplication v1.3 on') > 0) {
                 serverPID = log.toString().match(/with PID (\d+)/)[1];
                 win.webContents.send('serverPID', serverPID);
             }
